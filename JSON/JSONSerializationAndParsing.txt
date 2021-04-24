@@ -1,0 +1,104 @@
+
+                                                             
+															JSON Serialization and Parsing.
+
+  
+  When a program needs to save data or needs to transmit data across a network connection to another program, it must convert its inmemory data structures into 
+  a string of bytes or characters than can be saved or transmitted and then later be parsed to restore the original inmemory data structures. 
+
+  
+  This process of converting data structures into streams of bytes or characters is known as Serialization (or marshaling or even pickling).
+
+  
+  The easiest way to serialize data in JavaScript uses a serialization format known as JSON. This acronym stands for “JavaScript Object Notation” and, as the 
+  name implies, the format uses JavaScript object and array literal syntax to convert data structures consisting of objects and arrays into strings. 
+  
+  
+  JSON supports primitive numbers and strings and also the values true, false, and null, as well as arrays and objects built up from those primitive values. 
+  
+  
+  JSON does not support other JavaScript types like Map, Set, RegExp, Date, or typed arrays.
+
+
+  JavaScript supports JSON serialization and deserialization with the two functions : 
+  1) JSON.stringify() => Serialization,
+  2) JSON.parse() =>  Parsing. 
+ 
+ For Example :    
+    let o = {s: "", n: 0, a: [true, false, null]};
+    let s = JSON.stringify(o); // s == '{"s":"","n":0,"a":[true,false,null]}'
+    let copy = JSON.parse(s); // copy == {s: "", n: 0, a:[true, false, null]}
+	
+	
+	We can use this pair of functions as a somewhat inefficient way of creating a deep copy of an object:
+
+    // Make a deep copy of any serializable object or array
+    function deepcopy(o) { 
+        return JSON.parse(JSON.stringify(o));
+    }
+	
+	
+   If we want our JSONformatted string to be human-readable(if it is being used as a configuration file), then we should pass null  as the second argument and 
+   pass a number or string as the third argument.
+
+   This third argument tells JSON.stringify() that it should format the data on multiple indented lines. If the third argument is a number,
+   then it will use that number of spaces for each indentation level. If the third argument is a string of whitespace(such as '\t'), it will use that 
+   string for each level of indent.
+   
+   For example : 
+ 
+        let o = {s: "test", n: 0};
+        JSON.stringify(o, null, 2) // => '{\n "s": "test",\n "n":0\n}'
+		
+	
+       JSON.parse() ignores whitespace, so passing a third argument to JSON.stringify() has no impact on our ability to convert the string back into a data structure.
+	   
+	   
+	   
+   If JSON.stringify() is asked to serialize a value that is not natively supported by the JSON format, it looks to see if that value has a toJSON() method, 
+   and if so, it calls that method and then stringifies the return value in place of the original value. 
+   
+     
+   Date objects implement toJSON(): it returns the same string that toISOString() method does. This means that if we serialize an object that includes a Date, 
+   the date will automatically be converted to a string for us. When we parse the serialized string, the re-created data structure will not be exactly the same as the 
+   one we started with because it will have a string where the original object had a Date. If we need to re-create Date objects (or modify the parsed object in
+   any other way), we can pass a “reviver” function as the second argument to JSON.parse(). 
+   
+   If specified, this “reviver” function is invoked once for each primitive value(but not the objects or arrays that contain those primitive values) parsed from the input string. 
+   
+   The function is invoked with two arguments. 
+   The first is a property name—either an object property name or an array index converted to a string. 
+   The second argument is the primitive value of that object property or array element.
+
+
+   Furthermore, the function is invoked as a method of the object or array that contains the primitive value, so we can refer to that containing object with the this keyword.
+   The return value of the reviver function becomes the new value of the named property. If it returns its second argument, the property will remain unchanged. 
+   If it returns undefined, then the named property will be deleted from the object or array before JSON.parse() returns to the user.
+
+
+   In example below, we call JSON.parse() that uses a reviver function to filter some properties and to re-create Date objects:
+       
+	   let data = JSON.parse(text, function(key, value) {
+       // Remove any values whose property name begins with an underscore
+       if (key[0] === "_") return undefined;
+	   
+	   // If the value is a string in ISO 8601 date format convert it to a Date.
+       if (typeof value === "string" && /^\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d.\d\d\dZ$/.test(value)) {
+	      return new Date(value);
+	  }
+       // Otherwise, return the value unchanged
+      return value;
+        });
+   
+	
+                                                                JSON IS A SUBSET OF JAVASCRIPT
+																
+    When data is serialized to JSON format, the result is valid JavaScript source code for an expression that evaluates to a copy of the original data structure. 
+	
+	If we prefix a JSON string with var data = and pass the result to eval(), we’ll get a copy of the original data structure assigned to the variable data. 
+	We should never do this, however, because it is a huge security hole — if an attacker could inject arbitrary JavaScript code into a JSON file, they could make 
+	your program run their code. It is faster and safer to just use JSON.parse() to decode JSON-formatted data.
+	
+    JSON is sometimes used as a human-readable configuration file format. If we find ourself hand-editing a JSON file, note that the JSON format is a very strict
+    subset of JavaScript. Comments are not allowed and property names must be enclosed in double quotes even when JavaScript would not require this.
+	
