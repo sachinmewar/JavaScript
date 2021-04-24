@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title> JSON Indentation </title>
+</head>
+<body>
+   <p> 
+      The third argument of JSON.stringify() is used to control indentation and white spaces.<br />
+      The numerical values of the argument specifies the number of spaces to indent each level. <br />
+      The maximum numeric indentation value is 10, any value larger than 10 sets the value to 10.
+   </p>
+   <script>
+      let myPhone = {
+          name : "Apple",
+          model: "iPhone 11 Pro",
+          specs : [
+              "128 Gb Storage",
+              "4 Gb RAM",
+              "Night Mode",
+              "Triple Camera"
+          ],
+          year : 2020
+      };
+      
+      var StringIndentation = JSON.stringify(myPhone, null, 5);
+      document.write(" <br>Using Numerical value to indent : <br>" + StringIndentation);
+      // Using string as line break
+      var StringIndentation = JSON.stringify(myPhone, null, " ---------- ");
+      document.write(" <br><br> Using string to indent : <br>" + StringIndentation);
+
+      var StringIndentation = JSON.stringify(myPhone, null, "<br>");
+      document.write(" <br><br> Using line break to indent : <br>" + StringIndentation);
+
+      var StringIndentation = JSON.stringify(myPhone, null, "\t");
+      document.write(" <br><br> Using tab to indent : <br>" + StringIndentation);
+   </script>
+</body>
+</html>
