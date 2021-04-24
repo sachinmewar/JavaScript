@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> JSON Serialization And Parsing </title>
+</head>
+<body>
+    <p>
+        We will serialize myPhone object and then parses the same string into an appropriate JavaScript Object.
+    </p>
+
+    <script>
+        let myPhone = {
+            name : "Apple",
+            model: "iPhone 11 Pro",
+            specs : [
+                "128 Gb Storage",
+                "4 Gb RAM",
+                "Night Mode",
+                "Triple Camera"
+            ],
+            year : 2020
+        };
+
+        let JSONString = JSON.stringify(myPhone);
+        document.write(JSONString);
+
+        let phoneDetails = JSON.parse(JSONString);
+        document.write("<br><br>" + phoneDetails.specs);
+        
+        document.write("<br><br><br>" + "Displaying whole object");
+        for(let property in phoneDetails){
+            document.write("<br>" + property + " : " + phoneDetails[property]);
+        }
+    </script>
+</body>
+</html>
