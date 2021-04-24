@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title> Parse Option </title>
+</head>
+<body>
+   <p>
+      The method JSON.parse() accepts an additon argument, it is called on each key-value pair.<br />
+      The function is also called as reviver function, the other function JSON.stringify() (filter) is called as a replacer.<br />
+      The format of both the functions are same, they take two arguments key and value and are supposed to return a value.<br />
+   </p>
+
+   <script>
+      let myPhone = {
+            name : "Apple",
+            model: "iPhone 11 Pro",
+            specs : [
+                "128 Gb Storage",
+                "4 Gb RAM",
+                "Night Mode",
+                "Triple Camera"
+            ],
+            year : 2020,
+            launchDate: new Date(2021, 3, 25)
+        };
+
+        let JSONString = JSON.stringify(myPhone, null, 10);
+        document.write(JSONString);
+
+        let newString = JSON.parse(JSONString, (key, value) => {
+           if (key == "launchDate"){
+              return undefined;
+            } else {
+               return value;
+            }
+        });
+        document.write("<br><br>" + newString.launchDate);
+   </script>
+</body>
+</html>
