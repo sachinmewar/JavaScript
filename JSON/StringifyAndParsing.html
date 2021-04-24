@@ -10,7 +10,6 @@
     <p>
         We will serialize myPhone object and then parses the same string into an appropriate JavaScript Object.
     </p>
-
     <script>
         let myPhone = {
             name : "Apple",
@@ -34,6 +33,40 @@
         for(let property in phoneDetails){
             document.write("<br>" + property + " : " + phoneDetails[property]);
         }
+        
+        // Filtering Result using array
+        let JSONFilteredString = JSON.stringify(myPhone, ["name", "specs"]);
+        document.write("<br><br> serializing object properties listed in the array : <br>" + JSONFilteredString);
+
+        //Filteing Result using function.
+        let jsonFunctionFilteredString = JSON.stringify(myPhone, function(key, value){
+            switch(key){
+                case "specs":
+                    return value.join(",")
+                 
+                case "year":
+                    return 2019;
+                    
+                case "version":
+                    return undefined;
+                    
+                default:
+                    return value;
+            }
+        }, 10);
+        document.write("<br><br> serializing object properties listed in the fuction : <br>" + jsonFunctionFilteredString);
+
     </script>
+
+    <p>
+        <br /> 
+        The method JSON.stringify() can accept atmost two arguments, in addition to the object being serialized, 
+        these arguments are used to specify alternate ways to serialize a JavaScript Object.<br />
+        
+        The first argument is filter , which can be either a function or an array.<br />
+        The second argument specifies an option for indenting the stringified JSON string.<br />
+    </p>
+
+
 </body>
 </html>
