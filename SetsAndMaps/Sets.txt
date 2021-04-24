@@ -1,0 +1,127 @@
+
+   ES2015: Sets.
+
+   Set are not ordered or indexed and they donot allow duplicates.
+
+   Creating a set object with set constructor:
+ 
+   let s = new Set();  // A new empty set.
+   let t = new Set([1, s]); // A new set with two members.
+   let z = new Set("mississippi"); // 4 elements 'm', 'i', 's', 'p'
+ 
+   z.size() // => 4
+
+   Sets don’t need to be initialized when we create them. We can add and remove elements at any time with add(), delete(), and clear().
+
+   s.clear() // Remove everything from set s.
+   s.size() //=> 0
+
+   s.add([1, 2, 5]) // Add array into set.
+   s.add(true) // add boolean value true into set.
+   s.add(1) // We can add values of different type.
+   s.size() //3
+
+   s.delete(true) // delete is used to delete element from set.
+   s.size() //=> 2
+
+   s.add([1, 2, 3])
+   s.delete([1,2,3]) // => false: the array in the set is different
+
+   The add() method takes a single argument; if we pass an
+   array, it adds the array itself to the set, not the individual array
+   elements. 
+ 
+   add() always returns the set it is invoked on, however if we want to add multiple values to a set, we can used chained method calls like
+ 
+
+   s.add('a').add('b').add('c');
+
+
+   The delete() method also only deletes a single set element at a time. 
+
+   It returns a boolean value. 
+
+   If the value we specify was actually a member of the set, then delete() removes it and returns true. Otherwise, it does nothing and returns false.
+   
+   
+
+  Set membership is based on strict equality checks, like the === operator performs. 
+    
+   
+   When the values are objects (or arrays or functions), they are also compared as if with ===. 
+   
+   We added an array to the set and then tried to remove that array by passing a
+   different array (albeit with the same elements) to the delete() method. 
+   In order for this to work, we would have had to pass a reference to exactly the same array.
+   
+   
+   has() method is used to check whether a specified value is a member of the set or not.
+   
+   let oneDigitOdd = new set([1, 3, 5, 7, 9]);
+   oneDigitOdd.has(2);   //False
+   oneDigitOdd.has(5);   //True
+   oneDigitOdd.has(6);   // False
+   oneDigitOdd.has("5");  //False: Not odd.
+
+ 
+   Sets are optimized for membership testing, and no matter how many members
+   the set has, the has() method will be very fast.
+   
+ 
+  The includes() method of an array also performs membership testing, but the time it
+   takes is proportional to the size of the array, and using an array as a set
+   can be much, much slower than using a real Set object.
+
+
+   Set is iterable. Therefore, we can use for/of loop.
+   
+   let sum = 0;
+   for(let odd of oneDigitOdd){
+       sum += odd;
+   }   
+   sum // 25
+   
+   
+   
+   Because Set objects are iterable, we can convert them to arrays 
+   and argument lists with the ... spread operator:
+
+
+    [...oneDigitOdd] // => [1, 3, 5, 7, 9]: the set converted to an Array
+    Math.max(...oneDigitPrimes) // => 7: set elements passed asfunction arguments
+   
+   
+   
+     The JavaScript Set class always remembers the order that elements were inserted in, 
+     and it always uses this order when we iterate through a set.
+   
+     
+
+     A narrow version of Set() is also available called weakSet().  
+	 A weakSet(), mainly differs from a Set() in that it can only hold values that are objects 
+	 and when a value is removed from a weakSet(), and it has no other references, the value will be garbage collected (aka weak references). 
+     Additionally a weakSet() can't be iterated over, uses .length to get size of the set, and only has add(), delete(), and has() methods.
+   
+   
+   
+                                                                    WeakSet
+	                      
+	WeakSet implements a set of objects that does not prevent those objects from being garbage collected. 
+	
+	The WeakSet() constructor works like the Set() constructor, but WeakSet objects differ from Set objects in the following ways :
+
+    WeakSet does not allow primitive values as members.
+    
+	WeakSet implements only the add(), has(), and delete() methods and is not iterable.
+
+    WeakSet does not have a size property.
+ 
+    WeakSet is not frequently used: its use cases are like those for WeakMap. If we want to mark (or “brand”) an object as having some special property or type, 
+	for example, we could add it to a WeakSet. 
+	Then, elsewhere, when we want to check for that property or type, we can test for membership in that WeakSet. Doing this with a regular set
+	would prevent all marked objects from being garbage collected, but this is not a concern when using WeakSet.
+   
+   
+   
+   
+   

@@ -1,0 +1,205 @@
+   
+  ES2015 comes with Map().
+  Until ES2015 Object literals were the substitute for a Map.
+  
+  
+  
+
+  A Map object represents a set of values known as keys, where each key has another value associated with (or “mapped to”) it. 
+  
+
+  Like arrays, maps are fast: looking up the value associated with a key will be fast(though not as fast as indexing an array) no matter how large the map is. 
+
+  
+
+   Create a new map with Map() constructor : 
+   
+   let m = new Map(); // Create a new empty map.
+   let n = new Map([  // Create a new map initialized with strings associated with numbers.
+	   ["one", 1],
+	   ["two", 2]   
+   ]);
+
+  
+
+  The optional argument to the Map() constructor should be an iterable object that yields two element [key, value] arrays. 
+  
+
+  It means we can use the Map() constructor to copy other maps or to copy the property names and values from an existing object:
+  
+
+  let copyMap = new Map(n); // A new map with the same keys and values as map n.
+  let o = { x: 1, y: 2};    // An object with two properties
+  let p = new Map(Object.entries(o));  // Same as new map([["x",1], ["y", 2]]).
+  
+  
+
+  Once we have created a Map object, we can query the value associated with a given key  with get() and can add a new key/value pair with set(). 
+  
+  
+
+  If we call set() with a key that already exists in the map, we will change the value associated with that key, not add a new
+  key/value mapping. 
+  
+  In addition to get() and set(), the Map class also defines other methods: 
+  
+     use has() to check whether a map includes the specified key, 
+  
+     use delete() to remove a key (and its associated value) from the map, 
+  
+     use clear() to remove all key/value pairs from the map 
+  
+     use the size property to find out how many keys a map contains
+  
+  
+ 
+  Maps are key-value pairs stored in insertion order. 
+  
+  
+
+  let m = new Map(); // Start with an empty map
+  m.size // => 0: empty maps have no keys
+  
+
+  m.set("one", 1); // Map the key "one" to the value 1
+  m.set("two", 2); // And the key "two" to the value 2.
+  m.size // => 2: the map now has two keys
+  
+
+  m.get("two") // => 2: return the value associated with key "two"
+  m.get("three") // => undefined: this key is not in the set
+  
+
+  m.set("one", true); // Change the value associated with an existing key
+  
+
+  m.has("one") // => true: the map has a key "one"
+  m.has(true) // => false: the map does not have a key true
+  
+
+  m.delete("one") // => true: the key existed and deletion succeeded
+  m.size // => 1
+  
+  
+  m.delete("three") // => false: failed to delete a nonexistent key
+  m.clear(); // Remove all keys and values from the map
+
+
+
+  The set() method of Map can be chained, which allows maps to be initialized without using arrays of arrays:
+  
+
+  let m = new Map().set("one", 1).set("two", 2).set("three", 3); 
+  m.size // => 3
+  m.get("two") // => 2
+  
+  
+
+   As with Set, any JavaScript value can be used as a key or a value in a Map. This includes null, undefined, and NaN, as well as reference types like objects and arrays. 
+ 
+ 
+  And as with the Set class, Map compares keys by identity, not by equality, so if we use an object or array as a
+   key, it will be considered different from every other object and array, even those with exactly the same properties or elements:
+
+
+    let m = new Map(); // Start with an empty map.
+    m.set({}, 1); // Map one empty object to the number 1.
+    m.set({}, 2); // Map a different empty object to the number 2.
+    m.size // => 2: there are two keys in this map
+    m.get({}) // => undefined: but this empty object is not a key
+    m.set(m, undefined); // Map the map itself to the value undefined.
+    m.has(m) // => true: m is a key in itself 
+    m.get(m) // => undefined: same value we'd get if m wasn't a key
+
+
+
+
+  Map objects are iterable, and each iterated value is a two-element array where the first element is a key and the second element is the value
+  associated with that key. 
+
+
+
+
+  If we use the spread operator with a Map object, we’ll get an array of arrays like the ones that we  passed to the Map() constructor. 
+  And when iterating a map with a for/of loop, it is idiomatic to use destructuring assignment to assign the key and value to separate variables:
+  
+  let m = new Map([["x", 1], ["y", 2]]);
+   [...m]   // => [["x", 1], ["y", 2]]
+  for(let [key, value] of m) {
+      // On the first iteration, key will be "x" and value will be 1
+      // On the second iteration, key will be "y" and value will be 2
+  }
+
+
+
+  
+  If we want to iterate just the keys or just the associated values of a map, use the keys() and values() methods.
+  
+  The entries() method returns an iterable object that iterates key/value pairs, but this is exactly the same as iterating the map directly.
+  
+  [...m.keys()]    // => ["x", "y"]: just the keys
+  [...m.values()]  // => [1, 2]: just the values
+  [...m.entries()] // => [["x", 1], ["y", 2]]: same as [...m]
+  
+
+   Map objects can also be iterated using the forEach() method.
+   
+    m.forEach((value, key) => {  // note value, key NOT key, value
+            // On the first invocation, value will be 1 and key will be "x"
+            // On the second invocation, value will be 2 and key will be "y"
+	});
+	
+	
+	
+	
+   It may seem strange that the value parameter comes before the key parameter in the code above. Since with for/of iteration, the key comes first. 
+	
+	
+  The forEach() method of arrays passes the array element first and the array index second, so, by analogy, the forEach() method of a map passes 
+  the map value first and the map key second.
+
+	
+	
+    Maps can be looped over using the for-of loop.
+    
+    The key and the value can both be any type of value, unlike Object literals in which the key is typically a string.
+	
+	
+    If we want to use Array methods on a Map simply spread the map into an array (i.e. [...myMap].filter(...);).
+    
+	
+    
+                                                                    weakMap()
+	
+   A weakMap(), mainly differs from a Map() in that it can only hold values that are objects and when a value is removed from a weakMap(), and it has no other references, 
+  the value will immediately be garbage collected (aka weak references). 
+	
+   Additionally a weakMap() can't be iterated over,  uses .length to get size of the map, and only  has set(), delete(), get() , and has() methods.
+	
+	
+	
+	The WeakMap class is a variant (but not an actual subclass) of the Map class that does not prevent its key values from being garbage collected.
+
+         A regular map holds “strong” references to its key values, and they remain reachable through the map, even if all other references to them are gone.
+
+	The WeakMap, by contrast, keeps “weak” references to its key values so that they are not reachable through the WeakMap, and their presence in the map 
+	does not prevent their memory from being reclaimed.
+
+        The WeakMap() constructor is just like the Map() constructor, but there are some significant differences between WeakMap and Map:
+
+        WeakMap keys must be objects or arrays; primitive values are not subject to garbage collection and cannot be used as keys.
+
+        WeakMap implements only the get(), set(), has(), and delete() methods. 
+		
+		
+       WeakMap is not iterable and does not define keys(), values(), or forEach(). If WeakMap was iterable, then its keys would be reachable and it wouldn’t be weak.
+   
+   Similarly, WeakMap does not implement the size property because the size of a WeakMap could change at any time as objects are garbage collected.
+
+   The intended use of WeakMap is to allow you to associate values with objects without causing memory leaks. Suppose, for example, that we
+   are writing a function that takes an object argument and needs to perform some time-consuming computation on that object. For
+   efficiency, we’d like to cache the computed value for later reuse. 
+   
+   If we use a Map object to implement the cache, we will prevent any of the objects from ever being reclaimed, but by using a WeakMap, 
+   we can avoid this problem. (We can often achieve a similar result using a private Symbol property to cache the computed value directly on the
+   object.
